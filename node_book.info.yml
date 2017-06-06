@@ -1,0 +1,6 @@
+name: node_book
+description: 'node_book'
+type: module
+core: 8.x
+version: 1.1
+package: Synapse

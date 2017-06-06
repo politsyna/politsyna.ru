@@ -1,0 +1,7 @@
+node_book.page:
+  path: '/node-book/page'
+  defaults:
+    _controller: '\Drupal\node_book\Controller\Page::pagePage'
+    _title: 'Page'
+  requirements:
+    _permission: 'access content'

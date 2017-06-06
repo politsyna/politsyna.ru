@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\node_orderprint\Controller\Shaduler;
+
+/**
+ * Node_book_entity_presave.
+ */
+function node_book_entity_presave(EntityInterface $node) {
+  if (method_exists($node, 'getType') && $node->getType() == 'book') {
+
+  }
+}
+
+/**
+ * Node_book_entity_view.
+ */
+function node_book_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (method_exists($entity, 'getType') && $entity->getType() == 'book') {
+    if ($view_mode != 'teaser') {
+      $build['sendemail'] = \Drupal::formBuilder()->getForm('Drupal\node_book\Form\SendEmail', $entity);
+      $entity->save(TRUE);
+    }
+  }
+}
+
+/**
+ * Node_payment_entity_presave.
+ */
+function node_book_theme($existing, $type, $theme, $path) {
+  return [
+    'glava-message' => [
+      'template' => 'glava-message',
+      'variables' => [
+        'info' => [],
+        'komu' => [],
+        'book' => [],
+        'glava' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * F implementation hook_mail().
+ */
+function node_book_mail($key, &$message, $params) {
+  if ($key == 'glava') {
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['body'];
+  }
+}
+
+/**
+ * F implementation hook_cron().
+ */
+function node_book_cron() {
+  Shaduler::init();
+}
